@@ -1,35 +1,52 @@
 #!/bin/bash
+# create-devcontainers-simple.sh
 
 CHAPTERS=("ch01" "ch02" "ch04" "ch05" "ch06")
+
+# Configuración por capítulo
+declare -A CHAPTER_CPUS
+declare -A CHAPTER_MEMORY
+
+# Notebooks ligeros
+CHAPTER_CPUS["ch01"]=2
+CHAPTER_MEMORY["ch01"]="4gb"
+CHAPTER_CPUS["ch02"]=2
+CHAPTER_MEMORY["ch02"]="4gb"
+CHAPTER_CPUS["ch06"]=2
+CHAPTER_MEMORY["ch06"]="4gb"
+
+# APIs/LangChain
+CHAPTER_CPUS["ch04"]=4
+CHAPTER_MEMORY["ch04"]="8gb"
+CHAPTER_CPUS["ch05"]=4
+CHAPTER_MEMORY["ch05"]="8gb"
 
 mkdir -p .devcontainer
 
 for chapter in "${CHAPTERS[@]}"; do
-    echo "🔧 Configurando ${chapter}..."
+    echo "🔧 Configurando ${chapter} (${CHAPTER_CPUS[$chapter]}-core, ${CHAPTER_MEMORY[$chapter]})..."
 
     mkdir -p ".devcontainer/${chapter}"
 
-    # devcontainer.json
-    cat > ".devcontainer/${chapter}/devcontainer.json" << 'EOF'
+    cat > ".devcontainer/${chapter}/devcontainer.json" << EOF
 {
-  "name": "Python Development - CHAPTER_NAME",
+  "name": "Chapter ${chapter#ch} - Python Development",
   "image": "mcr.microsoft.com/devcontainers/python:3.11",
 
   "hostRequirements": {
-    "cpus": 8,
-    "memory": "32gb"
+    "cpus": ${CHAPTER_CPUS[$chapter]},
+    "memory": "${CHAPTER_MEMORY[$chapter]}",
+    "storage": "32gb"
   },
 
-  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}/CHAPTER_NAME",
+  "workspaceFolder": "/workspaces/\${localWorkspaceFolderBasename}/${chapter}",
 
   "features": {
     "ghcr.io/devcontainers/features/git:1": {},
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
 
-  "onCreateCommand": ".devcontainer/CHAPTER_NAME/on-create.sh",
-  "postCreateCommand": ".devcontainer/CHAPTER_NAME/post-create.sh",
-  "postStartCommand": ".devcontainer/CHAPTER_NAME/post-start.sh",
+  "postCreateCommand": "bash -c 'pip install uv && cd /workspaces/\${localWorkspaceFolderBasename}/${chapter} && uv venv && source .venv/bin/activate && uv pip install -r requirements.txt && echo \"✅ ${chapter} setup completo!\"'",
 
   "customizations": {
     "vscode": {
@@ -44,78 +61,57 @@ for chapter in "${CHAPTERS[@]}"; do
         "saoudrizwan.claude-dev",
         "continue.continue",
         "eamodio.gitlens",
-        "ms-toolsai.jupyter"
+        "ms-toolsai.jupyter",
+        "usernamehw.errorlens",
+        "tamasfe.even-better-toml",
+        "humao.rest-client"
       ],
       "settings": {
-        "python.defaultInterpreterPath": "${containerWorkspaceFolder}/.venv/bin/python",
+        "python.defaultInterpreterPath": "\${containerWorkspaceFolder}/.venv/bin/python",
         "python.terminal.activateEnvironment": true,
+        "python.terminal.activateEnvInCurrentTerminal": true,
         "editor.formatOnSave": true,
         "[python]": {
-          "editor.defaultFormatter": "ms-python.black-formatter"
-        }
+          "editor.defaultFormatter": "ms-python.black-formatter",
+          "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+          }
+        },
+        "ruff.enable": true,
+        "python.testing.pytestEnabled": true,
+        "editor.rulers": [88],
+        "files.trimTrailingWhitespace": true,
+        "files.insertFinalNewline": true,
+        "github.copilot.enable": {
+          "*": true,
+          "python": true,
+          "jupyter": true
+        },
+        "terminal.integrated.cwd": "\${containerWorkspaceFolder}"
       }
     }
   },
 
   "forwardPorts": [8000, 8888],
 
+  "portsAttributes": {
+    "8000": {
+      "label": "Application",
+      "onAutoForward": "notify"
+    },
+    "8888": {
+      "label": "Jupyter",
+      "onAutoForward": "silent"
+    }
+  },
+
   "remoteEnv": {
-    "PYTHONUNBUFFERED": "1"
+    "PYTHONUNBUFFERED": "1",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "UV_CACHE_DIR": "\${containerWorkspaceFolder}/.uv-cache"
   }
 }
 EOF
-
-    # Reemplazar CHAPTER_NAME
-    sed -i "s/CHAPTER_NAME/${chapter}/g" ".devcontainer/${chapter}/devcontainer.json"
-
-    # on-create.sh
-    cat > ".devcontainer/${chapter}/on-create.sh" << 'EOF'
-#!/bin/bash
-set -e
-echo "🔧 Instalando uv..."
-pip install uv
-echo "✅ uv instalado"
-EOF
-
-    # post-create.sh
-    cat > ".devcontainer/${chapter}/post-create.sh" << 'INNEREOF'
-#!/bin/bash
-set -e
-
-CHAPTER_DIR="/workspaces/${localWorkspaceFolderBasename}"
-CHAPTER_DIR="${CHAPTER_DIR}/CHAPTER_PLACEHOLDER"
-
-cd "$CHAPTER_DIR"
-echo "📂 Working in: $(pwd)"
-
-echo "📦 Creando venv..."
-uv venv
-
-echo "📥 Instalando dependencias..."
-. .venv/bin/activate
-if [ -f "requirements.txt" ]; then
-    uv pip install -r requirements.txt
-else
-    echo "⚠️  No requirements.txt found"
-fi
-
-echo "✅ Setup completo!"
-INNEREOF
-
-    sed -i "s/CHAPTER_PLACEHOLDER/${chapter}/g" ".devcontainer/${chapter}/post-create.sh"
-
-    # post-start.sh
-    cat > ".devcontainer/${chapter}/post-start.sh" << 'INNEREOF'
-#!/bin/bash
-CHAPTER_DIR="/workspaces/${localWorkspaceFolderBasename}/CHAPTER_PLACEHOLDER"
-cd "$CHAPTER_DIR"
-[ -d ".venv" ] && . .venv/bin/activate && echo "✅ Ambiente activo"
-INNEREOF
-
-    sed -i "s/CHAPTER_PLACEHOLDER/${chapter}/g" ".devcontainer/${chapter}/post-start.sh"
-
-    # Permisos
-    chmod +x ".devcontainer/${chapter}"/*.sh
 
     echo "✅ ${chapter} configurado"
 done
@@ -123,7 +119,11 @@ done
 echo ""
 echo "✅ Configuración completa!"
 echo ""
+echo "📊 Recursos asignados:"
+echo "  ch01, ch02, ch06: 2-core, 4GB"
+echo "  ch04, ch05: 4-core, 8GB"
+echo ""
 echo "Siguiente paso:"
 echo "git add .devcontainer/"
-echo "git commit -m 'Add working devcontainer configs'"
+echo "git commit -m 'Add simplified devcontainer configs'"
 echo "git push"
