@@ -1,0 +1,79 @@
+{
+  "name": "Chapter 06 - Python Development",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+
+  "hostRequirements": {
+    "cpus": 8,
+    "memory": "32gb",
+    "storage": "32gb"
+  },
+
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}/ch06",
+
+  "postCreateCommand": "bash /workspaces/${localWorkspaceFolderBasename}/.devcontainer/ch06/setup.sh",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.debugpy",
+        "charliermarsh.ruff",
+        "ms-python.black-formatter",
+        "github.copilot",
+        "github.copilot-chat",
+        "saoudrizwan.claude-dev",
+        "continue.continue",
+        "googlecloudtools.cloudcode",
+        "eamodio.gitlens",
+        "ms-toolsai.jupyter",
+        "usernamehw.errorlens",
+        "tamasfe.even-better-toml",
+        "humao.rest-client"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/workspaces/${localWorkspaceFolderBasename}/ch06/.venv/bin/python",
+        "python.terminal.activateEnvironment": true,
+        "editor.formatOnSave": true,
+        "editor.inlineSuggest.enabled": true,
+        "[python]": {
+          "editor.defaultFormatter": "ms-python.black-formatter",
+          "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+          }
+        },
+        "ruff.enable": true,
+        "python.testing.pytestEnabled": true,
+        "editor.rulers": [88],
+        "files.trimTrailingWhitespace": true,
+        "files.insertFinalNewline": true,
+        "github.copilot.enable": {
+          "*": true,
+          "python": true,
+          "jupyter": true
+        },
+        "terminal.integrated.cwd": "/workspaces/${localWorkspaceFolderBasename}/ch06"
+      }
+    }
+  },
+
+  "forwardPorts": [8000, 8888],
+
+  "portsAttributes": {
+    "8000": {
+      "label": "Application",
+      "onAutoForward": "notify"
+    },
+    "8888": {
+      "label": "Jupyter",
+      "onAutoForward": "silent"
+    }
+  },
+
+  "remoteEnv": {
+    "PYTHONUNBUFFERED": "1",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "UV_CACHE_DIR": "/workspaces/${localWorkspaceFolderBasename}/ch06/.uv-cache",
+    "CHAPTER": "ch06"
+  }
+}
