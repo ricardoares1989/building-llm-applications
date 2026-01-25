@@ -77,6 +77,8 @@
   "remoteEnv": {
     "PYTHONUNBUFFERED": "1",
     "PYTHONDONTWRITEBYTECODE": "1",
-    "UV_CACHE_DIR": "${containerWorkspaceFolder}/.uv-cache"
+    "UV_CACHE_DIR": "${containerWorkspaceFolder}/.uv-cache",
+    "GEMINI_API_KEY": "${localEnv:GEMINI_API_KEY}"
+      
   }
 }
