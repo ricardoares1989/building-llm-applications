@@ -10,7 +10,7 @@ api_key = os.getenv("GEMINI_API_KEY")  # B
 def get_llm():  # C
     return ChatGoogleGenerativeAI(
         api_key=api_key,
-        model_name="gemini-flash-latest",
+        model="gemini-flash-latest",
     )
 
 
