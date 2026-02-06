@@ -1,13 +1,19 @@
-from langchain_openai import ChatOpenAI
-from dotenv import load_dotenv
 import os
 
-load_dotenv() #A
-openai_api_key = os.getenv("OPENAI_API_KEY") #B
+from dotenv import load_dotenv
+from langchain_google_genai import ChatGoogleGenerativeAI
 
-def get_llm(): #C
-    return ChatOpenAI(openai_api_key=openai_api_key,
-                 model_name="gpt-5-nano")
-#A Load the environment variables from the .env file
-#B Get the OpenAI API key from the environment variables
-#C Instantiate and return the ChatOpenAI model
+load_dotenv()  # A
+api_key = os.getenv("GEMINI_API_KEY")  # B
+
+
+def get_llm():  # C
+    return ChatGoogleGenerativeAI(
+        api_key=api_key,
+        model_name="gemini-flash-latest",
+    )
+
+
+# A Load the environment variables from the .env file
+# B Get the OpenAI API key from the environment variables
+# C Instantiate and return the ChatGoogleGenerativeAI model
