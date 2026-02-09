@@ -9,6 +9,10 @@ from prompts import (
 
 RESULT_TEXT_MAX_CHARACTERS = 10000
 
+def print_entry(x):
+    print("ejecutando proceso simultaneo")
+    return x
+
 search_result_text_and_summary_chain = (
     RunnableLambda(lambda x:
         {
@@ -20,6 +24,7 @@ search_result_text_and_summary_chain = (
             'user_question': x['user_question']
         }
     )
+    | RunnableLambda(print_entry)
     | RunnableParallel (
         {
             'text_summary': SUMMARY_PROMPT_TEMPLATE 
