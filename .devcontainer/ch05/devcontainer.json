@@ -1,5 +1,5 @@
 {
-  "name": "Chapter 04 - Python Development",
+  "name": "Chapter 05 - Python Development",
   "image": "mcr.microsoft.com/devcontainers/python:3.11",
   "hostRequirements": {
     "cpus": 4,
