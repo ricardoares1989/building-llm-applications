@@ -1,15 +1,15 @@
 {
   "name": "Python Development (8-core)",
   "image": "mcr.microsoft.com/devcontainers/python:3.11",
-  
+
   "hostRequirements": {
-    "cpus": 8,
-    "memory": "32gb",
+    "cpus": 2,
+    "memory": "16gb",
     "storage": "32gb"
   },
-  
+
   "postCreateCommand": "bash .devcontainer/setup.sh",
-  
+
   "customizations": {
     "vscode": {
       "extensions": [
@@ -41,9 +41,9 @@
       }
     }
   },
-  
+
   "forwardPorts": [8000, 5432],
-  
+
   "portsAttributes": {
     "8000": {
       "label": "Application",
@@ -54,13 +54,13 @@
       "onAutoForward": "silent"
     }
   },
-  
+
   "remoteEnv": {
     "PYTHONUNBUFFERED": "1",
     "PYTHONDONTWRITEBYTECODE": "1",
     "UV_CACHE_DIR": "${containerWorkspaceFolder}/.uv-cache"
   },
-  
+
   "features": {
     "ghcr.io/devcontainers/features/git:1": {},
     "ghcr.io/devcontainers/features/github-cli:1": {}
