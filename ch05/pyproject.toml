@@ -1,0 +1,15 @@
+[project]
+name = "ch05"
+version = "0.1.0"
+description = "LLM Research Agent with LangGraph"
+requires-python = ">=3.11"
+dependencies = [
+    "langchain>=1.0.3",
+    "langchain-google-genai>=2.1.0",
+    "langchain-community>=0.4.1",
+    "requests>=2.32.5",
+    "langgraph>=1.0.2",
+    "bs4",
+    "duckduckgo-search>=7.5.0",
+    "python-dotenv>=1.0.0",
+]
