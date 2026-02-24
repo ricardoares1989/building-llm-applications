@@ -2,7 +2,7 @@
 set -e
 
 CHAPTER_DIR="/workspaces/${localWorkspaceFolderBasename}"
-CHAPTER_DIR="${CHAPTER_DIR}/ch05"
+CHAPTER_DIR="${CHAPTER_DIR}/ch04"
 
 cd "$CHAPTER_DIR"
 echo "📂 Working in: $(pwd)"
