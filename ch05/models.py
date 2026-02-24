@@ -8,7 +8,7 @@ google_api_key = os.getenv("GEMINI_API_KEY")
 
 def get_llm():
     return ChatGoogleGenerativeAI(google_api_key=google_api_key,
-                 model="gemini-2.0-flash")
+                 model="gemini-2.5-flash")
 
 # Define typed dictionaries for state handling
 class AssistantInfo(TypedDict):
