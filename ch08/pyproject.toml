@@ -1,0 +1,19 @@
+[project]
+name = "ch08-advanced-indexing"
+version = "0.1.0"
+description = "Advanced indexing with LangChain and Gemini"
+requires-python = ">=3.10"
+dependencies = [
+    "langchain>=1.2.10",
+    "langchain-google-genai>=4.2.1",
+    "langchain-community>=0.4.1",
+    "langchain-chroma>=1.1.0",
+    "langchain-text-splitters>=1.1.1",
+    "chromadb>=1.5.2",
+    "lxml>=5.4.0",
+    "html2text>=2025.4.15",
+    "lark>=1.2.2",
+    "notebook>=7.4.5",
+    "pip>=26.0.1",
+    "python-dotenv>=1.0.0",
+]
