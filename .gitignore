@@ -100,8 +100,10 @@ ch05/utils/__pycache__/
 .idea
 /ch04/.env
 /ch05/.env
+/ch09/.env
 /ch11/.env
 
 ch04/.env
 ch05/.env
+ch09/.env
 ch11/.env
